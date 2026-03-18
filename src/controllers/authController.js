@@ -109,7 +109,7 @@ const resetPasswordController = async (req, res) => {
     }
     //hashing password
     const salt = await bcrypt.genSaltSync(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
     user.password = hashedPassword;
     await user.save();
     return res.status(200).json({
@@ -126,8 +126,8 @@ const resetPasswordController = async (req, res) => {
 //update password
 const updatePasswordController = async (req, res) => {
   try {
-    const userId = req.body._id;
-    const user = await authModel.findOne(userId);
+    const userId = req.user._id;
+    const user = await authModel.findById(userId);
     if (!user) {
       return res.status(400).json({
         message: "user not found",
