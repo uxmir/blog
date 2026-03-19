@@ -36,7 +36,8 @@ const registerController = async (req, res) => {
     return res.status(200).json({
       message: "user has been created successfully",
       success: true,
-      user,
+      token,
+      user
     });
   } catch (error) {
     return res.status(500).json({
@@ -80,6 +81,7 @@ const loginController = async (req, res) => {
     return res.status(200).json({
       message: "user has been logged successfully",
       success: true,
+      token,
       user,
     });
   } catch (error) {

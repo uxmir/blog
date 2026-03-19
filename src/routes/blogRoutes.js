@@ -7,6 +7,6 @@ router.post("/create", authMiddleware,upload.single('image'), blogController.cre
 router.get("/getdataall", blogController.getAllBlogController);
 router.get("/getdata", authMiddleware, blogController.getAllBlogUserController);
 router.get("/data/:id", authMiddleware, blogController.getBlogUserDataById);
-router.put("/data/:id", authMiddleware, blogController.updateBlogById);
-router.delete("/data/:id", authMiddleware, blogController.deleteBlogById);
+router.put("/update/:id", authMiddleware, blogController.updateBlogById);
+router.delete("/delete/:id", authMiddleware, blogController.deleteBlogById);
 module.exports = router;

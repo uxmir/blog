@@ -9,18 +9,19 @@ const dns = require("dns");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
 
+//middleware
+app.use(express.json());
+app.use(cookieParser());
+//for file
+app.use('/uploads',express.static('uploads'))
+
 //allRoute
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v2/blog',blogRouter)
 
-//middleware
-app.use(cookieParser());
-app.use(express.json());
-//for file
-app.use('/uploads',express.static('uploads'))
-const PORT = process.env.PORT ? process.env.PORT : 3000;
+const PORT =  3000;
 //database connection
 connectionDataBase();
-app.listen(PORT, () => {
-  console.log(`server is running on ${PORT}`);
+app.listen(PORT,"0.0.0.0", () => {
+  console.log(`server is running on http://0.0.0.0: ${PORT}`);
 });
