@@ -1,7 +1,7 @@
 const mongoose=require('mongoose')
 const blogSchema=new mongoose.Schema({
     user:{
-        type:mongoose.Types.Schema.objectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:"auth",
         required:[true,"this feild is required"]
     },

@@ -1,7 +1,11 @@
-const express=require('express')
-const router=express.Router()
-const blogController=require('../controllers/blogController')
-router.post('/create',blogController.createBlogController)
-router.get('/getData',blogController.getAllBlogController)
-router.get('/getData',blogController.getAllBlogUserController)
-module.exports=router
+const express = require("express");
+const router = express.Router();
+const authMiddleware = require("../middlewares/authMiddleware");
+const blogController = require("../controllers/blogController");
+router.post("/create", authMiddleware, blogController.createBlogController);
+router.get("/getdataall", blogController.getAllBlogController);
+router.get("/getdata", authMiddleware, blogController.getAllBlogUserController);
+router.get("/data/:id", authMiddleware, blogController.getBlogUserDataById);
+router.put("/data/:id", authMiddleware, blogController.updateBlogById);
+router.delete("/data/:id", authMiddleware, blogController.deleteBlogById);
+module.exports = router;
