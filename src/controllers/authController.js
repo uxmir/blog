@@ -147,7 +147,7 @@ const updatePasswordController = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, salt);
     user.password = hashedPassword;
     await user.save();
-    return res.status(200).json({
+    return res.status(200).json({ 
       message: "password has been updated successfully",
       success: true,
     });

@@ -3,14 +3,15 @@ const express = require("express");
 const connectionDataBase = require("./config/db");
 const cookieParser = require("cookie-parser");
 const authRouter=require('./src/routes/authRoutes')
-
+const blogRouter=require('./src/routes/blogRoutes')
 //for dns connection with mongodb atlas
 const dns = require("dns");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 const app = express();
 
-//authRoute
+//allRoute
 app.use('/api/v1/auth',authRouter)
+app.use('/api/v2/blog',blogRouter)
 
 //middleware
 app.use(cookieParser());

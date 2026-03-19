@@ -23,6 +23,8 @@ const authSchema = new mongoose.Schema({
     type:String,
     required:[true, "this feild is required"]
   }
+},{
+  timestamps:true
 });
 
 const authModel=mongoose.model("auth",authSchema)
