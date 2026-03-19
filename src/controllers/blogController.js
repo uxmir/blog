@@ -1,8 +1,9 @@
 const blogModel = require("../models/blogModel");
 const createBlogController = async (req, res) => {
   try {
-    const { image, title, text } = req.body;
+    const {  title, text } = req.body;
     const userId = req.user._id;
+    const imageName=req.file?req.file.filename:""
     if (!title || !text) {
       return res.status(400).json({
         message: "each  feild is required",
@@ -11,7 +12,7 @@ const createBlogController = async (req, res) => {
     }
     const createBlog = await blogModel.create({
       user: userId,
-      image,
+      image:imageName,
       title,
       text,
     });

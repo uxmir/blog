@@ -16,6 +16,8 @@ app.use('/api/v2/blog',blogRouter)
 //middleware
 app.use(cookieParser());
 app.use(express.json());
+//for file
+app.use('/uploads',express.static('uploads'))
 const PORT = process.env.PORT ? process.env.PORT : 3000;
 //database connection
 connectionDataBase();

@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authMiddleware");
+const upload=require('../middlewares/fileMiddleware')
 const blogController = require("../controllers/blogController");
-router.post("/create", authMiddleware, blogController.createBlogController);
+router.post("/create", authMiddleware,upload.single('image'), blogController.createBlogController);
 router.get("/getdataall", blogController.getAllBlogController);
 router.get("/getdata", authMiddleware, blogController.getAllBlogUserController);
 router.get("/data/:id", authMiddleware, blogController.getBlogUserDataById);
