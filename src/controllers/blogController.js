@@ -1,9 +1,9 @@
 const blogModel = require("../models/blogModel");
 const createBlogController = async (req, res) => {
   try {
-    const {  title, text } = req.body;
+    const { title, text } = req.body;
     const userId = req.user._id;
-    const imageName=req.file?req.file.filename:""
+    const imageName = req.file ? req.file.filename : "";
     if (!title || !text) {
       return res.status(400).json({
         message: "each  feild is required",
@@ -12,7 +12,7 @@ const createBlogController = async (req, res) => {
     }
     const createBlog = await blogModel.create({
       user: userId,
-      image:imageName,
+      image: imageName,
       title,
       text,
     });
@@ -32,11 +32,28 @@ const createBlogController = async (req, res) => {
 //get all data
 const getAllBlogController = async (req, res) => {
   try {
-    const getAllBlog = await blogModel.find({});
+    const { search, page = 1, limit = 10 } = req.query;
+    const query = {};
+    if (search) {
+      query.$or = [
+        { title:  { $regex: search, $options: "i" } },
+        { text:  { $regex: search, $options: "i" } },
+      ];
+    }
+    const skip = (page - 1) * limit;
+    const allBlogs = 
+      await blogModel.find(query).populate("user", "name email")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+    //finding total blogs
+    const totalBlogs = await blogModel.countDocuments(query);
     return res.status(200).json({
-      message: "all blog fetched successfully",
+      message: "data fetched successfully",
       success: true,
-      getAllBlog,
+      allBlogs,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalBlogs / limit),
     });
   } catch (error) {
     return res.status(500).json({
@@ -49,11 +66,31 @@ const getAllBlogController = async (req, res) => {
 //get all data by following userId
 const getAllBlogUserController = async (req, res) => {
   try {
-    const getBlogUser = await blogModel.find({ user: req.user._id });
+    const { search, page = 1, limit = 10 } = req.query;
+    const userId = req.user._id;
+    const query = { userId };
+    if (search) {
+      if (search) {
+        query.$or = [
+          { title:  { $regex: search, $options: "i" } },
+          { text:  { $regex: search, $options: "i" } },
+        ];
+      }
+    }
+    const skip = (page - 1) * limit;
+    const allBlogs =
+      await blogModel.find(query).populate("user", "name email")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+    //finding total blogs
+    const totalBlogs = await blogModel.countDocuments(query);
     return res.status(200).json({
       message: "data fetched successfully",
       success: true,
-      getBlogUser,
+      allBlogs,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalBlogs / limit),
     });
   } catch (error) {
     return res.status(500).json({
