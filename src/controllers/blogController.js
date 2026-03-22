@@ -52,6 +52,7 @@ const getAllBlogController = async (req, res) => {
       message: "data fetched successfully",
       success: true,
       allBlogs,
+      totalBlogs,
       currentPage: parseInt(page),
       totalPages: Math.ceil(totalBlogs / limit),
     });
@@ -89,6 +90,7 @@ const getAllBlogUserController = async (req, res) => {
       message: "data fetched successfully",
       success: true,
       allBlogs,
+      totalBlogs,
       currentPage: parseInt(page),
       totalPages: Math.ceil(totalBlogs / limit),
     });

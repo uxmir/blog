@@ -4,6 +4,7 @@ const connectionDataBase = require("./config/db");
 const cookieParser = require("cookie-parser");
 const authRouter=require('./src/routes/authRoutes')
 const blogRouter=require('./src/routes/blogRoutes')
+const commentRouter=require('./src/routes/commentRoutes')
 //for dns connection with mongodb atlas
 const dns = require("dns");
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
@@ -18,6 +19,7 @@ app.use('/uploads',express.static('uploads'))
 //allRoute
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v2/blog',blogRouter)
+app.use('/api/v3/comment',commentRouter)
 
 const PORT =  3000;
 //database connection
