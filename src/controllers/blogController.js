@@ -1,4 +1,5 @@
 const blogModel = require("../models/blogModel");
+const commentModel = require("../models/blogModel");
 const createBlogController = async (req, res) => {
   try {
     const { title, text } = req.body;
@@ -33,16 +34,18 @@ const createBlogController = async (req, res) => {
 const getAllBlogController = async (req, res) => {
   try {
     const { search, page = 1, limit = 10 } = req.query;
+    const { blog } = req.body;
     const query = {};
     if (search) {
       query.$or = [
-        { title:  { $regex: search, $options: "i" } },
-        { text:  { $regex: search, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
+        { text: { $regex: search, $options: "i" } },
       ];
     }
     const skip = (page - 1) * limit;
-    const allBlogs = 
-      await blogModel.find(query).populate("user", "name email")
+    const allBlogs = await blogModel
+      .find(query)
+      .populate("user", "name email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -63,7 +66,6 @@ const getAllBlogController = async (req, res) => {
     });
   }
 };
-
 //get all data by following userId
 const getAllBlogUserController = async (req, res) => {
   try {
@@ -73,14 +75,15 @@ const getAllBlogUserController = async (req, res) => {
     if (search) {
       if (search) {
         query.$or = [
-          { title:  { $regex: search, $options: "i" } },
-          { text:  { $regex: search, $options: "i" } },
+          { title: { $regex: search, $options: "i" } },
+          { text: { $regex: search, $options: "i" } },
         ];
       }
     }
     const skip = (page - 1) * limit;
-    const allBlogs =
-      await blogModel.find(query).populate("user", "name email")
+    const allBlogs = await blogModel
+      .find(query)
+      .populate("user", "name email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -106,10 +109,14 @@ const getBlogUserDataById = async (req, res) => {
   try {
     const { id } = req.params;
     const getUserDataById = await blogModel.findById(id);
+    const allComments =
+      await commentModel.find({ blog: id }).populate("user", "name")
+    .sort({ createdAt: -1 });
     return res.status(200).json({
       message: "data fetched successfully",
       success: true,
       getUserDataById,
+      allComments,
     });
   } catch (error) {
     return res.status(500).json({
