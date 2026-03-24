@@ -1,5 +1,4 @@
 const commentModel = require("../models/commentModel");
-
 const createCommentController = async (req, res) => {
   try {
     const { blog, comment } = req.body;
