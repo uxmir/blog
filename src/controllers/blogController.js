@@ -1,5 +1,6 @@
+
 const blogModel = require("../models/blogModel");
-const commentModel = require("../models/blogModel");
+const commentModel = require("../models/commentModel");
 const createBlogController = async (req, res) => {
   try {
     const { title, text } = req.body;
@@ -34,7 +35,6 @@ const createBlogController = async (req, res) => {
 const getAllBlogController = async (req, res) => {
   try {
     const { search, page = 1, limit = 10 } = req.query;
-    const { blog } = req.body;
     const query = {};
     if (search) {
       query.$or = [
@@ -125,6 +125,7 @@ const getBlogUserDataById = async (req, res) => {
     });
   }
 };
+
 const updateBlogById = async (req, res) => {
   try {
     const { id } = req.params;
