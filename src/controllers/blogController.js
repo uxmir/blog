@@ -1,6 +1,6 @@
-
 const blogModel = require("../models/blogModel");
 const commentModel = require("../models/commentModel");
+const replyModel = require("../models/replyModel");
 const createBlogController = async (req, res) => {
   try {
     const { title, text } = req.body;
@@ -109,14 +109,33 @@ const getBlogUserDataById = async (req, res) => {
   try {
     const { id } = req.params;
     const getUserDataById = await blogModel.findById(id);
-    const allComments =
-      await commentModel.find({ blog: id }).populate("user", "name")
-    .sort({ createdAt: -1 });
+    //replay data
+    const allComments = await commentModel
+      .find({ blog: id })
+      .populate("user", "name")
+      .sort({ createdAt: -1 });
+    //replay data
+    const allReplies = await replyModel
+      .find({ blog: id })
+      .populate("user", "name")
+      .sort({ createdAt: 1 });
+
+    //mapping all comments with their replies
+    const allCommentswithReplies = allComments.map((comment) => {
+      const replieswithcomments = allReplies.filter(
+        (reply) =>reply.comment && reply.comment.toString() === comment._id.toString(),
+      );
+      return {
+        ...comment._doc,
+        replies: replieswithcomments,
+      };
+    });
+
     return res.status(200).json({
       message: "data fetched successfully",
       success: true,
       getUserDataById,
-      allComments,
+      allComments: allCommentswithReplies,
     });
   } catch (error) {
     return res.status(500).json({
