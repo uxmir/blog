@@ -7,6 +7,7 @@ function main() {
   const blogRouter = require("./src/routes/blogRoutes");
   const commentRouter = require("./src/routes/commentRoutes");
   const replyRouter = require("./src/routes/replyRoutes");
+  const likeRouter=require("./src/routes/likeRoutes")
   //for dns connection with mongodb atlas
   const dns = require("dns");
   dns.setServers(["1.1.1.1", "8.8.8.8"]);
@@ -23,7 +24,7 @@ function main() {
   app.use("/api/v2/blog", blogRouter);
   app.use("/api/v3/comment", commentRouter);
   app.use("/api/v4/reply", replyRouter);
-  
+  app.use("/api/v5/like",likeRouter)
   const PORT = 3000;
   //database connection
   connectionDataBase();
