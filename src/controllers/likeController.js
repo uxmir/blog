@@ -4,14 +4,14 @@ const createLikeController = async (req, res) => {
     const { blog, comment } = req.body;
     const userId = req.user._id;
     if (!blog || !comment) {
-      return res.status(404).sjon({
+      return res.status(404).json({
         message: "blog or comment is missing",
         success: false,
       });
     }
-    const isLikeExists = await likeModel.findOne({ id: userId });
+    const isLikeExists = await likeModel.findOne({ user: userId, comment:comment });
     if (isLikeExists) {
-      const deleteLike = await likeModel.deleteById({ id: userId });
+      const deleteLike = await likeModel.findByIdAndDelete(isLikeExists._id);
       return res.status(200).json({
         message: "like is deleted",
         success: true,
@@ -19,8 +19,9 @@ const createLikeController = async (req, res) => {
       });
     } else {
       const createLike = await likeModel.create({
-        id: _id,
-        like,
+        user:userId,
+        blog,
+        comment
       });
       return res.status(200).json({
         message: "like is created",
@@ -37,11 +38,12 @@ const createLikeController = async (req, res) => {
 };
 const getAllLikeController = async (req, res) => {
   try {
-    const allLike = await likeModel.find().populate("user", "name");
+    const {id}=req.params;
+    const allLikes = await likeModel.find({comment:id}).populate("user", "name");
     return res.status(200).json({
       message: "like is found",
-      allLike,
-      likelength: allLike?.length,
+      allLikes,
+      likeCount: allLikes?.length || 0,
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,5 +1,5 @@
 const mongoose=require('mongoose')
-const likeSchema=new mongoose.Schema({
+const dislikeSchema=new mongoose.Schema({
        user:{
            type:mongoose.Schema.Types.ObjectId,
            ref:"auth",
@@ -20,5 +20,5 @@ const likeSchema=new mongoose.Schema({
     timestamps: true
 })
 
-const likeModel=mongoose.model("like",likeSchema)
-module.exports=likeModel
+const dislikeModel=mongoose.model("like",dislikeSchema)
+module.exports=dislikeModel
