@@ -43,7 +43,7 @@ const updateCommentController = async (req, res) => {
     const updateComment = await commentModel.findOneAndUpdate(
       { _id: id, user: userId },
       { comment: req.body.comment },
-      { new: true },
+      { returnDocument: 'after' },
     );
     return res.status(200).json({
       message: "comment updated successfully",

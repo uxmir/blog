@@ -71,7 +71,13 @@ const getAllBlogUserController = async (req, res) => {
   try {
     const { search, page = 1, limit = 10 } = req.query;
     const userId = req.user._id;
-    const query = { userId };
+    const query = { user:req.params.id };
+    if(req.params.id !==userId.toString()){
+      return res.status(404).json({
+        message:'this is not logged user',
+        success:false
+      })
+    }
     if (search) {
       if (search) {
         query.$or = [
@@ -148,10 +154,11 @@ const getBlogUserDataById = async (req, res) => {
 const updateBlogById = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId=req.user._id;
     const updateBlogById = await blogModel.findOneAndUpdate(
-      { _id: id, user: req.user._id },
+      { _id: id, user:userId },
       { $set: req.body },
-      { new: true },
+      { returnDocument: 'after' }
     );
     return res.status(200).json({
       message: "data updated successfully",

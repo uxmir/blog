@@ -37,7 +37,7 @@ const updateReplyController = async (req, res) => {
     const updateReply = await replyModel.findOneAndUpdate(
       { _id: id, user: req.user._id },
       { reply: req.body.reply },
-      { new: true },
+      { returnDocument: 'after' },
     );
     return res.status(200).json({
       message: "reply updated successfully",
