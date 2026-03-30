@@ -1,6 +1,6 @@
-const mongoose=require("mongoose")
-const dislikeModel = require("../models/likeModel");
-const likeModel = require("../models/dislikeModel");
+
+const likeModel = require("../models/likeModel");
+const dislikeModel = require("../models/dislikeModel");
 const createDisLikeController = async (req, res) => {
   try {
     const { blog, comment } = req.body;
@@ -68,3 +68,6 @@ module.exports = {
   createDisLikeController,
   getAllDisLikeController,
 };
+
+
+//dislike:dislike._id
